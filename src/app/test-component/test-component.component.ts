@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../user.service';
 
-type User = {id: Number, name: string}
+// don't know much about my users
+type User = {}
 
 @Component({
   selector: 'app-test-component',
@@ -8,11 +10,19 @@ type User = {id: Number, name: string}
   styleUrls: ['./test-component.component.sass']
 })
 export class TestComponentComponent implements OnInit {
-  users: User[] = [];
+  users: any;
   currentUser: User | undefined;
-  constructor() { }
-
-  ngOnInit(): void {
+  
+  constructor(private userService: UserService) {
+    
   }
-
+  
+  ngOnInit(): void {
+    this.getUsers();
+  }
+  
+  async getUsers(): Promise<void> {
+    (await this.userService.getUsers())
+      .subscribe((users: any) => this.users = users);
+  }
 }
